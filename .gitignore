@@ -16,8 +16,8 @@
 
 
 # Exec build
-./label-exporter
+label-exporter
 
 # Code Coverage
-./coverage.out
-./coverage.html
+coverage.out
+coverage.html
