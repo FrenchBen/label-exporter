@@ -11,11 +11,12 @@ import (
 )
 
 var (
-	owner = kingpin.Arg("owner", "Owner of the repository.").Required().String()
-	repo  = kingpin.Arg("repo", "Repository whose wanted labels.").Required().String()
-	yaml  = kingpin.Flag("yaml", "Use the YAML format.").Short('y').Bool()
-	json  = kingpin.Flag("json", "Use the JSON format.").Short('j').Bool()
-	table = kingpin.Flag("table", "Use the table format.").Short('t').Bool()
+	owner  = kingpin.Arg("owner", "Owner of the repository.").Required().String()
+	repo   = kingpin.Arg("repo", "Repository whose wanted labels.").Required().String()
+	output = kingpin.Flag("output", "Output format. One of: json|yaml|table - default is table").Default("table").Short('o').String()
+	yaml   = kingpin.Flag("yaml", "Use the YAML format.").Short('y').Bool()
+	json   = kingpin.Flag("json", "Use the JSON format.").Short('j').Bool()
+	table  = kingpin.Flag("table", "Use the table format.").Short('t').Bool()
 )
 
 func main() {
@@ -54,6 +55,34 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Println(string(b))
+		return
+	}
+
+	switch *output {
+	case "yaml":
+		b, err := exporter.LabelsToYAML(labels)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(b))
+		return
+	case "json":
+		b, err := exporter.LabelsToJSON(labels)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(b))
+		return
+	case "table":
+		b, err := exporter.LabelsToTable(labels)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(b))
+		return
+	default:
+		fmt.Println("flag not recognized: ", *output)
+
 		return
 	}
 }

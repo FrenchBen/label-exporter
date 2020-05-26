@@ -9,7 +9,7 @@ on:
 jobs:
 
   build:
-    name: Build
+    name: Build and Test
     runs-on: ubuntu-latest
     steps:
 
@@ -22,19 +22,25 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
-    - name: Get dependencies
-      run: |
-        go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
+    - name: Cache go modules
+      uses: actions/cache@v1
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('go.sum') }}
+        restore-keys: ${{ runner.os }}-go-
+
+    - name: Run go vet
+      run: go vet ./...
+
+    - name: Run go test
+      run: go test -v -race -coverprofile coverage.txt -covermode atomic ./...
+
+    - name: Ensure integration tests build
+      # don't actually run tests since they hit live GitHub API
+      run: go test -v -tags=integration -run=^$ ./test/integration
 
     - name: Build
       run: go build -v .
-
-    - name: Test
-      run: go test -v .
 
     - name: Upload coverage to Codecov  
       uses: codecov/codecov-action@v1

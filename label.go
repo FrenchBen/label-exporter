@@ -6,13 +6,15 @@ import (
 	"github.com/google/go-github/v28/github"
 )
 
+// Label interface for fetching github labels
 type Label struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Color       string `json:"color"`
 }
 
-func (c *githubClient) ListLabels(ctx context.Context, owner, repo string) ([]*Label, error) {
+// ListLabels will fetch the labels from Github, with a specific format
+func (c *Client) ListLabels(ctx context.Context, owner, repo string) ([]*Label, error) {
 	opt := &github.ListOptions{PerPage: 10}
 	var labels []*Label
 	for {
