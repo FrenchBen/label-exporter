@@ -1,4 +1,9 @@
-# label-exporter
+# label-exporter #
+
+[![GoDoc](https://img.shields.io/static/v1?label=godoc&message=reference&color=blue)](https://pkg.go.dev/github.com/FrenchBen/label-exporter/exporter)
+[![Test Status](https://github.com/FrenchBen/label-exporter/workflows/tests/badge.svg)](https://github.com/FrenchBen/label-exporter/actions?query=workflow%3Atests)
+[![Test Coverage](https://codecov.io/gh/FrenchBen/label-exporter/branch/master/graph/badge.svg)](https://codecov.io/gh/FrenchBen/label-exporter)
+
 
 Export GitHub labels in the form of YAML, JSON and table.
 
