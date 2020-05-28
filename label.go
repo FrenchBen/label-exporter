@@ -2,6 +2,7 @@ package exporter
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/go-github/v28/github"
 )
@@ -14,11 +15,11 @@ type Label struct {
 }
 
 // ListLabels will fetch the labels from Github, with a specific format
-func (c *Client) ListLabels(ctx context.Context, owner, repo string) ([]*Label, error) {
+func (c *Client) ListLabels(ctx context.Context, user, repo string) ([]*Label, error) {
 	opt := &github.ListOptions{PerPage: 10}
 	var labels []*Label
 	for {
-		ghLabels, resp, err := c.client.Issues.ListLabels(ctx, owner, repo, opt)
+		ghLabels, resp, err := c.client.Issues.ListLabels(ctx, user, repo, opt)
 		if err != nil {
 			return nil, err
 		}
@@ -35,4 +36,14 @@ func (c *Client) ListLabels(ctx context.Context, owner, repo string) ([]*Label, 
 		opt.Page = resp.NextPage
 	}
 	return labels, nil
+}
+
+// GetRepo will get details about a repo for an org/user
+func (c *Client) GetRepo(ctx context.Context, user, repo string) {
+	repos, _, err := c.client.Repositories.Get(context.Background(), user, repo)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Printf("Recently updated repositories by %q: %v", user, github.Stringify(repos))
 }

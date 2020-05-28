@@ -8,7 +8,7 @@ build:
 push: build
 	docker image push $(IMG_NAME):$(TAG)
 
-build-local:
+local-build:
 	go build -o label-exporter cmd/label-exporter/main.go
 
 coverage:

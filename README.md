@@ -16,6 +16,9 @@ https://github.com/settings/tokens/new and:
 $ export GITHUB_TOKEN=enter_the_token_here
 ```
 
+_**Note: Github will return a 404 if you try to read from a private repo. To fix this, simply change the scope of your token to include private repos as well._
+
+
 Then either download a binary release from 
 https://github.com/micnncim/label-exporter/releases or:
 
@@ -31,9 +34,8 @@ usage: label-exporter [<flags>] <owner> <repo>
 
 Flags:
       --help   Show context-sensitive help (also try --help-long and --help-man).
-  -y, --yaml   Use the YAML format.
-  -j, --json   Use the JSON format.
-  -t, --table  Use the table format.
+      --debug           Enable debug mode.
+  -o, --output="table"  Output format. One of: json|yaml|table - default is table
 
 Args:
   <owner>  Owner of the repository.
@@ -43,7 +45,7 @@ Args:
 ## Example
 
 ```console
-$ label-exporter micnncim label-exporter --yaml
+$ label-exporter micnncim label-exporter --output yaml
 - color: d73a4a
   description: Something isn't working
   name: bug
@@ -56,7 +58,7 @@ $ label-exporter micnncim label-exporter --yaml
 ```
 
 ```console
-$ label-exporter micnncim label-exporter --json | jq
+$ label-exporter micnncim label-exporter --output json | jq
 [
   {
     "name": "bug",
@@ -77,7 +79,7 @@ $ label-exporter micnncim label-exporter --json | jq
 ```
 
 ```console
-$ label-exporter micnncim label-exporter --table
+$ label-exporter micnncim label-exporter --output table
 +------------------+--------------------------------+--------+
 |       NAME       |          DESCRIPTION           | COLOR  |
 +------------------+--------------------------------+--------+
